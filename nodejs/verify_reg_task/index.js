@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("dotenv").config({ path: "./setup.env" });
 const express = require("express");
 const morgan = require("morgan");
 const db = require("./db");
@@ -20,10 +20,10 @@ const PORT = process.env.PORT || 1000;
 
 async function main() {
   try {
-    const LIMIT = process.env.MODE == "T" ? 5 : (50000*3);
+    const LIMIT = process.env.MODE == "T" ? 5 : 50000 * 3;
     // const LIMIT = process.env.MODE == "T" ? 5 : 3830;
-    const START_TASK = Number(process.env.START_TASK)
-    const END_TASK = Number(process.env.END_TASK)
+    const START_TASK = Number(process.env.START_TASK);
+    const END_TASK = Number(process.env.END_TASK);
 
     const regs = await Regs.findAll({
       where: {
@@ -58,4 +58,3 @@ db.sync()
     console.log(e);
     console.log("Failed to connect db");
   });
-
