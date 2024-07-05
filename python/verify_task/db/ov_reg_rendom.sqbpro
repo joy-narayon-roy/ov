@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="D:/vbox_share/workshop/database/ov_reg_rendom.db" readonly="0" foreign_keys="0" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="0" synchronous="1"/><attached/><window><main_tabs open="structure browser query pragmas" current="2"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="966"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,4:mainRegs"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="Math" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths/><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Regs" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort><column index="2" mode="1"/></sort><column_widths><column index="1" value="84"/><column index="2" value="61"/><column index="3" value="40"/><column index="4" value="63"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="All Checked">SELECT *
+FROM Regs
+WHERE checked=0 AND reg&gt;=22225000000 AND reg &lt;22226000000</sql><sql name="Checked And Valid">SELECT *
+FROM Regs
+WHERE checked=1 AND valid=1</sql><sql name="Checked But Not valid">SELECT *
+FROM Regs
+WHERE checked=1 AND valid IS NOT 1</sql><sql name="Delete Checked But Not valid">DELETE
+FROM Regs
+WHERE checked=1 AND valid IS NOT 1</sql><sql name="Start from">SELECT * FROM Regs
+WHERE reg &gt;= 22225000000 AND reg &lt;22226000000 AND checked=0
+-- LIMIT 2
+-- WHERE reg=22237352131</sql><sql name="SQL 7">-- INSERT INTO Regs(reg,checked,valid) VALUES(22237352131,1,1)</sql><current_tab id="0"/></tab_sql></sqlb_project>

@@ -1,0 +1,15 @@
+*.tmp
+*.temp
+*.db
+*.sqlite
+*.sql
+
+/**/node_modules/
+/**/data/*.json
+/**/*.log
+/**/*.html
+
+/**/build/
+/**/dist/
+/**/.env
+/**/*.exe
