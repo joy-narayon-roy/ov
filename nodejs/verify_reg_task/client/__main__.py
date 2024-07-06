@@ -50,40 +50,26 @@ def worker():
                 reg = get_reg()
                 printf(reg)
             except req.exceptions.ConnectionError as err:
-                print(err)
-                print(err.errno)
-                print(dir(err))
-                print(type(err))
+                if(err.request.path_url == "/v/t/next"):
+                    print("Master server error")
+                    print(err)
+                    exit()
+                print(reg, err)
+                logger(reg, str(err))
                 exit()
-
-            exist = verify(reg)
-            if exist:
-                this_is_valid(reg)
-                printf(" Exist\n")
-            else:
-                printf(" Not Exist\n")
+            finally:
+                exist = verify(reg)
+                if exist:
+                    this_is_valid(reg)
+                    printf(" Exist\n")
+                else:
+                    printf(" Not Exist\n")
 
         except KeyboardInterrupt:
             logger(reg, f"{reg} : Exit")
             print(reg, "Exit")
             exit()
-        except req.exceptions.ConnectionError:
-            if(http_err.request.path_url == "/v/t/next"):
-                print("Master server error")
-                print(http_err)
-                exit()
-            print(reg, http_err)
-            logger(reg, str(http_err))
-            break
 
-        except req.exceptions.HTTPError as http_err:
-            if(http_err.request.path_url == "/v/t/next"):
-                print("Master server error")
-                print(http_err)
-                exit()
-            print(reg, http_err)
-            logger(reg, str(http_err))
-            break
         except Exception as err:
             logger(reg, str(err))
             print(err, "\n", reg)
