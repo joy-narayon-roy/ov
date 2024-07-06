@@ -1,4 +1,4 @@
-require("dotenv").config({ path: "./setup.env" });
+require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
 const db = require("./db");
@@ -20,7 +20,7 @@ const PORT = process.env.PORT || 1000;
 
 async function main() {
   try {
-    const LIMIT = process.env.MODE == "T" ? 5 : 50000 * 3;
+    const LIMIT = process.env.MODE == "T" ? 5 : 50000 * 1;
     // const LIMIT = process.env.MODE == "T" ? 5 : 3830;
     const START_TASK = Number(process.env.START_TASK);
     const END_TASK = Number(process.env.END_TASK);
@@ -28,12 +28,13 @@ async function main() {
     const regs = await Regs.findAll({
       where: {
         checked: false,
-        reg: { [Op.gte]: START_TASK, [Op.lt]: END_TASK },
+        // reg: { [Op.gte]: START_TASK, [Op.lt]: END_TASK },
       },
       limit: LIMIT,
     });
     task.begin(regs);
 
+    console.log(`${process.env.MODE} - Mode`);
     console.log(`${regs.length} - Task asigned`);
   } catch (e) {
     console.log(e);
