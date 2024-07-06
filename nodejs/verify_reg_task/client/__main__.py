@@ -60,6 +60,15 @@ def worker():
             logger(reg, f"{reg} : Exit")
             print(reg, "Exit")
             exit()
+        except req.exceptions.ConnectionError:
+            if(http_err.request.path_url == "/v/t/next"):
+                print("Master server error")
+                print(http_err)
+                exit()
+            print(reg, http_err)
+            logger(reg, str(http_err))
+            break
+
         except req.exceptions.HTTPError as http_err:
             if(http_err.request.path_url == "/v/t/next"):
                 print("Master server error")
