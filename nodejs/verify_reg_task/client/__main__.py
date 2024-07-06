@@ -61,9 +61,9 @@ def worker():
             print(reg, "Exit")
             exit()
         except req.exceptions.HTTPError as http_err:
-            if(http_err.request.url == "http://localhost:8100/v/t/next"):
+            if(http_err.request.path_url == "/v/t/next"):
                 print("Master server error")
-                print(http_err.request.path_url)
+                print(http_err)
                 exit()
             print(reg, http_err)
             logger(reg, str(http_err))
