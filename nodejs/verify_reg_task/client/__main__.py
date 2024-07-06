@@ -66,6 +66,7 @@ def worker():
             print(dir(http_err))
             print(type(http_err))
             print()
+            break
         except Exception as err:
             print()
             print(err)
