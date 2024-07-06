@@ -46,8 +46,12 @@ def this_is_valid(reg):
 def worker():
     while True:
         try:
-            reg = get_reg()
-            printf(reg)
+            try:
+                reg = get_reg()
+                printf(reg)
+            except Exception as err:
+                print(err)
+                exit()
 
             exist = verify(reg)
             if exist:
