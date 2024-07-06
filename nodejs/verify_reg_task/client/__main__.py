@@ -61,26 +61,13 @@ def worker():
             print(reg, "Exit")
             exit()
         except req.exceptions.HTTPError as http_err:
-            print()
-            print(http_err)
-            print(http_err.request.path_url)
-            print(http_err.request.url)
-            print(http_err.errno)
-            print(http_err.args)
-            print()
-            print(dir(http_err))
-            print(type(http_err))
-            print()
+            if(http_err.request.url == "http://localhost:8100/v/t/next"):
+                print("Master server error")
+                exit()
+            print(reg, http_err)
+            logger(reg, str(http_err))
             break
         except Exception as err:
-            print()
-            print(err)
-            print(type(err))
-            print(dir(err))
-            print()
-            # if not reg:
-            #     print(err, "\n", reg)
-            #     exit()
             logger(reg, str(err))
             print(err, "\n", reg)
             exit()
