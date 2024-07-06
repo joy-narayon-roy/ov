@@ -61,9 +61,12 @@ def worker():
             print(reg, "Exit")
             exit()
         except Exception as err:
-            if not reg:
-                print(err, "\n", reg)
-                exit()
+            print()
+            print(err)
+            print()
+            # if not reg:
+            #     print(err, "\n", reg)
+            #     exit()
             logger(reg, str(err))
             print(err, "\n", reg)
             exit()
