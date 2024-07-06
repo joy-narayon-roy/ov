@@ -52,7 +52,7 @@ def worker():
         try:
             reg = get_reg()
             printf(reg)
-            
+
             exist = verify(reg)
             if exist:
                 this_is_valid(reg)
