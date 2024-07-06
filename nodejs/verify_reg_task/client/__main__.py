@@ -63,6 +63,11 @@ def worker():
         except req.exceptions.HTTPError as http_err:
             print()
             print(http_err)
+            print(http_err.request.path_url)
+            print(http_err.request.url)
+            print(http_err.errno)
+            print(http_err.args)
+            print()
             print(dir(http_err))
             print(type(http_err))
             print()
