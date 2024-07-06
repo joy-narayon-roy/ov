@@ -1,4 +1,4 @@
-require("dotenv").config({ path: "./setup.env" });
+require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
 const tasks = require("./tasks");
@@ -72,7 +72,7 @@ const {
 
 tasks.begin(TASK_LIMIT, CASH_LIMIT, START, END).then(() => {
   console.log(tasks.get_all_tasked().length, "Tasks loaded.");
-  console.log("Mode",process.env.MODE);
+  console.log("Mode", process.env.MODE);
   app.listen(PORT, (err) => {
     if (err) {
       print(err);
