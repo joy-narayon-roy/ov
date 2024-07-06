@@ -51,6 +51,8 @@ def worker():
                 printf(reg)
             except Exception as err:
                 print(err)
+                print(dir(err))
+                print(type(err))
                 exit()
 
             exist = verify(reg)
