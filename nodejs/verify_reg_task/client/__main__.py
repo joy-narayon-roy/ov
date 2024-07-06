@@ -49,8 +49,9 @@ def worker():
             try:
                 reg = get_reg()
                 printf(reg)
-            except Exception as err:
+            except req.exceptions.ConnectionError as err:
                 print(err)
+                print(err.errno)
                 print(dir(err))
                 print(type(err))
                 exit()
