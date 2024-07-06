@@ -1,4 +1,4 @@
-require("dotenv").config({ path: "./setup.env" });
+require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
 const db = require("./db");
@@ -28,7 +28,7 @@ async function main() {
     const regs = await Regs.findAll({
       where: {
         checked: false,
-        reg: { [Op.gte]: START_TASK, [Op.lt]: END_TASK },
+        // reg: { [Op.gte]: START_TASK, [Op.lt]: END_TASK },
       },
       limit: LIMIT,
     });
