@@ -63,6 +63,8 @@ def worker():
         except Exception as err:
             print()
             print(err)
+            print(type(err))
+            print(dir(err))
             print()
             # if not reg:
             #     print(err, "\n", reg)
