@@ -60,6 +60,12 @@ def worker():
             logger(reg, f"{reg} : Exit")
             print(reg, "Exit")
             exit()
+        except req.exceptions.HTTPError as http_err:
+            print()
+            print(http_err)
+            print(dir(http_err))
+            print(type(http_err))
+            print()
         except Exception as err:
             print()
             print(err)
