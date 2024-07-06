@@ -20,7 +20,7 @@ const PORT = process.env.PORT || 1000;
 
 async function main() {
   try {
-    const LIMIT = process.env.MODE == "T" ? 5 : 50000 * 3;
+    const LIMIT = process.env.MODE == "T" ? 5 : 50000 * 1;
     // const LIMIT = process.env.MODE == "T" ? 5 : 3830;
     const START_TASK = Number(process.env.START_TASK);
     const END_TASK = Number(process.env.END_TASK);
@@ -34,6 +34,7 @@ async function main() {
     });
     task.begin(regs);
 
+    console.log(`${process.env.MODE} - Mode`);
     console.log(`${regs.length} - Task asigned`);
   } catch (e) {
     console.log(e);
