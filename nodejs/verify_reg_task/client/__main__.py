@@ -33,9 +33,13 @@ def logger(reg, data=""):
 
 
 def get_reg():
-    res = req.get(f'http://localhost:{MASTER_PORT}/v/t/next')
-    res.raise_for_status()
-    return res.json()['reg']
+    try:
+        res = req.get(f'http://localhost:{MASTER_PORT}/v/t/next')
+        res.raise_for_status()
+        return res.json()['reg']
+    except Exception as err:
+        print(err)
+        exit()
 
 
 def this_is_valid(reg):
@@ -46,30 +50,20 @@ def this_is_valid(reg):
 def worker():
     while True:
         try:
-            try:
-                reg = get_reg()
-                printf(reg)
-            except req.exceptions.ConnectionError as err:
-                if(err.request.path_url == "/v/t/next"):
-                    print("Master server error")
-                    print(err)
-                    exit()
-                print(reg, err)
-                logger(reg, str(err))
-                exit()
-            finally:
-                exist = verify(reg)
-                if exist:
-                    this_is_valid(reg)
-                    printf(" Exist\n")
-                else:
-                    printf(" Not Exist\n")
+            reg = get_reg()
+            printf(reg)
+            
+            exist = verify(reg)
+            if exist:
+                this_is_valid(reg)
+                printf(" Exist\n")
+            else:
+                printf(" Not Exist\n")
 
         except KeyboardInterrupt:
             logger(reg, f"{reg} : Exit")
             print(reg, "Exit")
             exit()
-
         except Exception as err:
             logger(reg, str(err))
             print(err, "\n", reg)
