@@ -34,6 +34,13 @@ def cp_to_store_path(cp, dstp):
         count += 1
         # break
     print()
+    # Recheck all copid:
+    for cp_file in cp_files:
+        # src_path = f'{cp}/{cp_file}'
+        dst_path = f'{dstp}/{cp_file}'
+        if not os.path.exists(dst_path):
+            print(cp_file, "Not copid")
+
     print(f"Src {cp} :", cp_files.__len__())
     print(f"Before {dstp} :", old_dstp_files.__len__())
     print(f"Now {dstp} :", os.listdir(dstp).__len__())
