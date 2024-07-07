@@ -56,6 +56,9 @@ class Task {
 
   async next() {
     const data = this.regs[this.index];
+    if (!data) {
+      return null;
+    }
     data.index = this.index;
     this.index += 1;
     const updated = await this.update_checked(data);
@@ -93,8 +96,10 @@ class Task {
       );
       return f;
     }
-    
-    await (await this.db).exec(`UPDATE Regs SET checked = 1,valid = 1 WHERE reg = ${reg}`);
+
+    await (
+      await this.db
+    ).exec(`UPDATE Regs SET checked = 1,valid = 1 WHERE reg = ${reg}`);
     return f;
   }
 
