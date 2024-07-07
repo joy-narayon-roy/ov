@@ -33,9 +33,13 @@ def logger(reg, data=""):
 
 
 def get_reg():
-    res = req.get(f'http://localhost:{MASTER_PORT}/v/t/next')
-    res.raise_for_status()
-    return res.json()['reg']
+    try:
+        res = req.get(f'http://localhost:{MASTER_PORT}/v/t/next')
+        res.raise_for_status()
+        return res.json()['reg']
+    except Exception as err:
+        print(err)
+        exit()
 
 
 def this_is_valid(reg):
@@ -61,9 +65,6 @@ def worker():
             print(reg, "Exit")
             exit()
         except Exception as err:
-            if not reg:
-                print(err, "\n", reg)
-                exit()
             logger(reg, str(err))
             print(err, "\n", reg)
             exit()

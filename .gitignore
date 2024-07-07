@@ -3,7 +3,6 @@
 *.db
 *.sqlite
 *.sql
-*zip
 
 /**/node_modules/
 /**/data/*.json
@@ -12,5 +11,6 @@
 
 /**/build/
 /**/dist/
+/**/__pycache__/
 /**/.env
 /**/*.exe
