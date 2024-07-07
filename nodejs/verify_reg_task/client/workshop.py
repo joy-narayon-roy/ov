@@ -53,4 +53,5 @@ def main():
         clean_invalid_html()
 
 
-main()
+if __name__ == "__main__":
+    main()

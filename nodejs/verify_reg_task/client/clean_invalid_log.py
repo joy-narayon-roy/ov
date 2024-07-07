@@ -27,10 +27,10 @@ def files_regs(arr=[]):
     return list(map(map_def, arr))
 
 
-def main():
+def main(logs_path="./log", htmls_path="./html"):
     print("-"*10, "Remove Invalid log", "-"*10)
-    logs_path = "./log"
-    htmls_path = "./html"
+    # logs_path = "./log"
+    # htmls_path = "./html"
     logs_regs = files_regs(get_files_list(logs_path))
     htmls_regs = files_regs(get_files_list(htmls_path))
     for log_reg in logs_regs:
@@ -41,7 +41,7 @@ def main():
                 os.remove(f"{logs_path}/{log_reg}.log")
 
     print("Old logs :", logs_regs.__len__())
-    print("Now Logs :",get_files_list(logs_path).__len__())
+    print("Now Logs :", get_files_list(logs_path).__len__())
     print("-"*10, "Done Remving Invalid log", "-"*10)
 
 
