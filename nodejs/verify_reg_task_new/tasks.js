@@ -27,6 +27,7 @@ class Task {
         start && end ? `AND reg >= ${start} AND reg < ${end}` : ""
       } LIMIT ${this.limit}`
     );
+    console.log(`DB Path : ${this.db_path}`);
     this.begined = true;
   }
 
@@ -56,6 +57,9 @@ class Task {
 
   async next() {
     const data = this.regs[this.index];
+    if (!data) {
+      return null;
+    }
     data.index = this.index;
     this.index += 1;
     const updated = await this.update_checked(data);
@@ -89,11 +93,14 @@ class Task {
       await (
         await this.db
       ).run(
-        `UPDATE Regs SET checked = 1 AND rawdata = ${rawdata} WHERE reg = ${reg}`
+        `UPDATE Regs SET checked = 1,valid = 1 AND rawdata = ${rawdata} WHERE reg = ${reg}`
       );
       return f;
     }
-    await (await this.db).run(`UPDATE Regs SET checked = 1 WHERE reg = ${reg}`);
+
+    await (
+      await this.db
+    ).exec(`UPDATE Regs SET checked = 1,valid = 1 WHERE reg = ${reg}`);
     return f;
   }
 
