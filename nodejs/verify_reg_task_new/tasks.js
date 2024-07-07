@@ -89,11 +89,12 @@ class Task {
       await (
         await this.db
       ).run(
-        `UPDATE Regs SET checked = 1 AND rawdata = ${rawdata} WHERE reg = ${reg}`
+        `UPDATE Regs SET checked = 1,valid = 1 AND rawdata = ${rawdata} WHERE reg = ${reg}`
       );
       return f;
     }
-    await (await this.db).run(`UPDATE Regs SET checked = 1 WHERE reg = ${reg}`);
+    
+    await (await this.db).exec(`UPDATE Regs SET checked = 1,valid = 1 WHERE reg = ${reg}`);
     return f;
   }
 

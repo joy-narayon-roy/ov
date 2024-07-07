@@ -31,14 +31,20 @@ def logger(reg, data=""):
 
 
 def get_reg():
-    res = req.get(f'http://localhost:{MASTER_PORT}/t/next')
-    res.raise_for_status()
-    return res.json()
+    try:
+        res = req.get(f'http://localhost:{MASTER_PORT}/t/next')
+        res.raise_for_status()
+        return res.json()
+    except Exception as err:
+        print(err)
+        print("Mater server error")
+        exit()
 
 
-def this_is_valid(reg):
-    res = req.get(f'http://localhost:{MASTER_PORT}//{reg}')
+def this_is_valid(reg, ind):
+    res = req.get(f'http://localhost:{MASTER_PORT}/t/v/{reg}/{ind}')
     res.raise_for_status()
+    print(res.text)
 
 
 def worker():
@@ -46,11 +52,11 @@ def worker():
         try:
             reg_info = get_reg()
             reg = reg_info['reg']
+            ind = reg_info['index']
             printf(reg)
-            break
             exist = verify(reg)
             if exist:
-                this_is_valid(reg)
+                this_is_valid(reg, ind)
                 printf(" Exist\n")
             else:
                 printf(" Not Exist\n")
@@ -63,7 +69,7 @@ def worker():
             logger(reg, str(err))
             print(err, "\n", reg)
             exit()
-        break
+        # break
 
 
 if __name__ == "__main__":
