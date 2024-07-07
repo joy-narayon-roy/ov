@@ -20,17 +20,18 @@ const PORT = process.env.PORT || 1000;
 
 async function main() {
   try {
-    const LIMIT = process.env.MODE == "T" ? 5 : 50000 * 1;
+    const limit = process.env.TASK_LIMIT ? Number(process.env.TASK_LIMIT) : 10;
+    // const LIMIT = process.env.MODE == "T" ? 5 : 50000 * 1;
     // const LIMIT = process.env.MODE == "T" ? 5 : 3830;
-    const START_TASK = Number(process.env.START_TASK);
-    const END_TASK = Number(process.env.END_TASK);
+    // const START_TASK = Number(process.env.START_TASK);
+    // const END_TASK = Number(process.env.END_TASK);
 
     const regs = await Regs.findAll({
       where: {
         checked: false,
         // reg: { [Op.gte]: START_TASK, [Op.lt]: END_TASK },
       },
-      limit: LIMIT,
+      limit: limit,
     });
     task.begin(regs);
 
