@@ -5,6 +5,17 @@ const tasks = require("./tasks");
 
 const app = express();
 
+function global_error(err, req, res, next) {
+  console.log(err);
+  if (err.status) {
+    // return res.status(err.status).send(err.message);
+  } else {
+    console.log(err);
+    return res.status(500).send("Server Error.");
+  }
+}
+
+app.use(global_error);
 app.use([
   express.json({ limit: "100mb" }),
   express.text(),
@@ -24,7 +35,7 @@ app.get("/health", (req, res) => {
 
 app.get("/t/all", async (req, res, next) => {
   try {
-    const all_tasks = await tasks.get_all_tasked(); // Use await for async function
+    const all_tasks = tasks.get_all_tasked();
     return res.status(200).json(all_tasks);
   } catch (e) {
     next(e);
@@ -35,7 +46,7 @@ app.get("/t/next", async (req, res, next) => {
   try {
     const curr_task = await tasks.next();
     if (!curr_task) {
-      return next(create_err(400, "Tasks checked")); // Correctly use next() with error
+      throw create_err(400, "Tasks checked");
     }
     return res.status(200).json(curr_task);
   } catch (e) {
@@ -68,18 +79,6 @@ app.post("/run/exe", async (req, res) => {
   }
 });
 
-function global_error(err, req, res, next) {
-//   console.error(err.stack); // Log stack trace for debugging
-  if (err.status) {
-    return res.status(err.status).send(err.message); // Send proper error response
-  } else {
-    return res.status(500).send("Server Error.");
-  }
-}
-
-// Add the error handler last
-app.use(global_error);
-
 const {
   PORT = 1000,
   TASK_LIMIT = 5,
@@ -93,6 +92,7 @@ tasks.begin(TASK_LIMIT, CASH_LIMIT, START, END).then(() => {
   console.log("Mode", process.env.MODE);
   app.listen(PORT, (err) => {
     if (err) {
+      print(err);
       console.log(err);
       console.log(`Server failed`);
     } else {
