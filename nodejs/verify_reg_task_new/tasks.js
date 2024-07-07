@@ -27,6 +27,7 @@ class Task {
         start && end ? `AND reg >= ${start} AND reg < ${end}` : ""
       } LIMIT ${this.limit}`
     );
+    console.log(`DB Path : ${this.db_path}`);
     this.begined = true;
   }
 
