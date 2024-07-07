@@ -44,7 +44,7 @@ def get_reg():
 def this_is_valid(reg, ind):
     res = req.get(f'http://localhost:{MASTER_PORT}/t/v/{reg}/{ind}')
     res.raise_for_status()
-    print(res.text)
+    # print(res.text)
 
 
 def worker():
