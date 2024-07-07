@@ -23,7 +23,7 @@ class Task {
     this.cash_limit = cash_limit;
     this.index = 0;
     this.regs = await db.all(
-      `SELECT reg,checked,valid FROM Regs WHERE checked = 0 LIMIT ${this.limit}`
+      `SELECT reg,checked,valid FROM Regs WHERE checked = 0 LIMIT ${this.limit} ORDER BY reg ASC`
     );
     console.log(`DB Path : ${this.db_path}`);
     this.begined = true;
