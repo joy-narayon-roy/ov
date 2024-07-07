@@ -51,6 +51,7 @@ def cp_to_store_path(cp, dstp):
 # cp_html_to_storeHtml()
 def main():
     cp_to_store_path("html", "store/html")
+    input("Next?(y/n)")
     cp_to_store_path("log", "store/log")
     inp = input("Enter to clean invalid log files(y/n)")
     if inp == "y":
