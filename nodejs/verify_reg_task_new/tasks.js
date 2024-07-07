@@ -42,12 +42,11 @@ class Task {
       this.checked_cash.push(reg);
       return false;
     }
-    const checked = this.checked_cash
-      .filter((d) => d)
-      .map((d) => d.reg)
-      .join(",");
+    const checked_arr = this.checked_cash.filter((d) => d).map((d) => d.reg);
+    const checked = checked_arr.join(",");
     const db = await this.db;
     await db.run(`UPDATE Regs SET checked = 1 WHERE reg IN(${checked})`);
+    console.log(checked_arr);
     this.checked_cash = [];
     this.checked_cash.push(reg);
     return true;
