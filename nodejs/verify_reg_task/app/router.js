@@ -50,7 +50,28 @@ router.get("/v/:reg", async (req, res) => {
     res.status(500).send("Err");
   }
 });
-// router.get("/", async () => {});
+
+router.get("/v/reload/:reg", async (req, res) => {
+  try {
+    const { reg } = req.params;
+    const data = await Regs.findByPk(reg);
+    if (!data) {
+      const created_reg = await Regs.create({
+        reg,
+        checked: false,
+        valid: false,
+      });
+      return res.status(200).json(created_reg);
+    }
+    data.set("checked", false);
+    data.set("valid", false);
+    await data.save();
+    res.status(200).json(data.toJSON());
+  } catch (err) {
+    res.status(500).send("Error");
+    console.log(err);
+  }
+});
 // router.get("/", async () => {});
 
 module.exports = router;

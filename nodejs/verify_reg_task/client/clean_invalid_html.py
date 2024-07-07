@@ -29,16 +29,16 @@ def read_html(file_path):
         data_obj[col1.text] = col2.text
 
     save_as_json(file_name, data_obj)
-    print("\t",file_name, "Saved")
+    print("\t", file_name, "Saved")
     return 1
 
 
-def main():
+def main(pth="./html"):
     i = 1
-    files = os.listdir("./html")
+    files = os.listdir(pth)
     file_len = files.__len__()
     for file in files:
-        file_path = f"./html/{file}"
+        file_path = f"{pth}/{file}"
         data_exist = read_html(file_path)
         os.remove(file_path)
         percentage = (i / file_len) * 100
@@ -51,5 +51,6 @@ def main():
         # break
 
 
-main()
+if __name__ == "__main__":
+    main()
 # read_html("./demo_valid.html")
