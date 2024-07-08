@@ -62,7 +62,13 @@ def read_and_save_db(files: list, path="./"):
         name=excluded.name,
         file_data=excluded.file_data,
         path=excluded.path''', results)
+    except KeyboardInterrupt:
+        conn.commit()
+        conn.close()
+        exit()
     except Exception as err:
+        conn.commit()
+        conn.close()
         print(err)
         exit()
     print(results.__len__(), "Saved")
@@ -73,7 +79,7 @@ def read_and_save_db(files: list, path="./"):
 
 def main():
     foler_path = "./html"
-    fector = 1000
+    fector = int(input("Enter at a time (default : 1000)")) or 1000
     htmls = os.listdir(foler_path)
     total_files = htmls.__len__()
     print("Total files :", total_files)
