@@ -49,14 +49,31 @@ def cp_to_store_path(cp, dstp):
 
 
 # cp_html_to_storeHtml()
+def user_intput(msg="Want to skip?(y/n)"):
+    print()
+    while True:
+        inp = str(input(f"{msg}\t")).lower()
+        if not inp in ["y", "n"]:
+            continue
+        print()
+        return inp
+
+
 def main():
-    cp_to_store_path("html", "store/html")
-    input("Next?(y/n)")
-    cp_to_store_path("log", "store/log")
-    inp = input("Enter to clean invalid log files(y/n)")
+
+    inp = user_intput("Copy html -> store/html? (y/n)")
+    if inp == "y":
+        cp_to_store_path("html", "store/html")
+    
+    inp = user_intput("Copy log -> store/log? (y/n)")
+    if inp == "y":
+        cp_to_store_path("log", "store/log")
+    
+    inp = user_intput("Enter to clean invalid log files(y/n)")
     if inp == "y":
         clean_invalid_log()
-    inp = input("Enter to clean invalid HTML files(y/n)")
+    
+    inp = user_intput("Enter to clean invalid HTML files(y/n)")
     if inp == "y":
         clean_invalid_html()
 
