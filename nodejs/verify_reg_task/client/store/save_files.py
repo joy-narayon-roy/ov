@@ -65,7 +65,7 @@ def read_and_save_db(files: list, path="./"):
     except Exception as err:
         print(err)
         exit()
-    print(results.__len__(),"Saved")
+    print(results.__len__(), "Saved")
 
     conn.commit()
     conn.close()
@@ -73,11 +73,19 @@ def read_and_save_db(files: list, path="./"):
 
 def main():
     foler_path = "./html"
+    fector = 1000
     htmls = os.listdir(foler_path)
-    htmls = split_array(htmls, 1000)
+    total_files = htmls.__len__()
+    print("Total files :", total_files)
+    htmls = split_array(htmls, fector)
+    count = 1
     for html in htmls:
         read_and_save_db(html, foler_path)
-        break
+        persentage = "{:.2f}".format(((count)/htmls.__len__()) * 100)
+        persentage = f"{persentage}%"
+        print(persentage, "Done")
+        count += 1
+        # break
 
 
 if __name__ == "__main__":
