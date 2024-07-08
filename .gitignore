@@ -3,6 +3,7 @@
 *.db
 *.sqlite
 *.sql
+*.res
 
 /**/node_modules/
 /**/data/*.json
