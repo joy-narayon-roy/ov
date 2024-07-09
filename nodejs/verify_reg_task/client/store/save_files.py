@@ -115,7 +115,7 @@ def main():
     htmls = split_array(htmls, fector)
     count = 1
     for html in htmls:
-        db_path = f"./db-{1}.db"
+        db_path = f"./files/db-{1}.db"
         read_and_save_db(html,db_path, foler_path)
         persentage = "{:.2f}".format(((count)/htmls.__len__()) * 100)
         persentage = f"{persentage}%"
