@@ -2,7 +2,7 @@ import threading
 import requests
 import sqlite3
 import os
-
+DB_PATH = "./files_ov.db"
 '''
 CREATE TABLE "Files" (
 	"id"	INTEGER,
@@ -29,7 +29,7 @@ def split_array(arr, size):
 def read_and_save_db(files: list, path="./"):
     threads = []
     results = []
-    conn = sqlite3.connect("./files_ov.db")
+    conn = sqlite3.connect(DB_PATH)
     curs = conn.cursor()
     curs.execute('''
     CREATE TABLE IF NOT EXISTS "Files" (
@@ -77,12 +77,41 @@ def read_and_save_db(files: list, path="./"):
     conn.close()
 
 
+def clean_db():
+    print("Cleaning db")
+    conn = sqlite3.connect(DB_PATH)
+    cur = conn.cursor()
+    cur.executescript('''
+        -- Create a temporary table to store unique rows
+        CREATE TEMPORARY TABLE temp_files AS 
+        SELECT MIN(id) AS id, name, file_data, path
+        FROM Files
+        GROUP BY name, file_data, path;
+
+        -- Delete duplicate rows from the original table
+        DELETE FROM Files
+        WHERE id NOT IN (SELECT id FROM temp_files);
+
+        -- Insert the unique rows back into the original table without specifying the id
+        INSERT INTO Files (name, file_data, path)
+        SELECT name, file_data, path
+        FROM temp_files;
+
+        -- (Optional) Drop the temporary table if not needed
+        DROP TABLE temp_files;
+    ''')
+    conn.commit()
+    conn.close()
+    print("Cleaning db Done")
+
+
 def main():
+    clean_db()
     foler_path = "./html"
-    fector = int(input("Enter at a time (default : 1000)")) or 1000
     htmls = os.listdir(foler_path)
     total_files = htmls.__len__()
     print("Total files :", total_files)
+    fector = int(input("Enter at a time (default : 1000)") or 1000)
     htmls = split_array(htmls, fector)
     count = 1
     for html in htmls:
