@@ -120,6 +120,7 @@ def main():
         persentage = f"{persentage}%"
         print(persentage, "Done")
         count += 1
+        clean_db()
         # break
     clean_db()
 
