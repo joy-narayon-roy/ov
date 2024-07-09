@@ -107,11 +107,11 @@ def clean_db():
 
 def main():
     clean_db()
+    fector = int(input("Enter at a time (default : 1000)") or 1000)
     foler_path = "./html"
     htmls = os.listdir(foler_path)
     total_files = htmls.__len__()
     print("Total files :", total_files)
-    fector = int(input("Enter at a time (default : 1000)") or 1000)
     htmls = split_array(htmls, fector)
     count = 1
     for html in htmls:
