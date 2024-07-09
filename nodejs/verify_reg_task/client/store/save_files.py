@@ -26,10 +26,10 @@ def split_array(arr, size):
     return [arr[i:i+size] for i in range(0, len(arr), size)]
 
 
-def read_and_save_db(files: list, path="./"):
+def read_and_save_db(files: list,db_path, path="./"):
     threads = []
     results = []
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(db_path)
     curs = conn.cursor()
     curs.execute('''
     CREATE TABLE IF NOT EXISTS "Files" (
@@ -77,9 +77,9 @@ def read_and_save_db(files: list, path="./"):
     conn.close()
 
 
-def clean_db():
+def clean_db(db_path):
     print("Cleaning db")
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(db_path)
     cur = conn.cursor()
     cur.executescript('''
         -- Create a temporary table to store unique rows
@@ -106,7 +106,7 @@ def clean_db():
 
 
 def main():
-    clean_db()
+    # clean_db()
     fector = int(input("Enter at a time (default : 1000)") or 1000)
     foler_path = "./html"
     htmls = os.listdir(foler_path)
@@ -115,14 +115,15 @@ def main():
     htmls = split_array(htmls, fector)
     count = 1
     for html in htmls:
-        read_and_save_db(html, foler_path)
+        db_path = f"./db-{1}.db"
+        read_and_save_db(html,db_path, foler_path)
         persentage = "{:.2f}".format(((count)/htmls.__len__()) * 100)
         persentage = f"{persentage}%"
         print(persentage, "Done")
         count += 1
-        clean_db()
+        clean_db(db_path)
         # break
-    clean_db()
+    # clean_db()
 
 
 if __name__ == "__main__":
