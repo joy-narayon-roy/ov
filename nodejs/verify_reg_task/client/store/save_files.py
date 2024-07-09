@@ -121,6 +121,7 @@ def main():
         print(persentage, "Done")
         count += 1
         # break
+    clean_db()
 
 
 if __name__ == "__main__":
