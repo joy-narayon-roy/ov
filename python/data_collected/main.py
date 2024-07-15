@@ -89,6 +89,9 @@ def collect_regs_data(reg_list):
 
 def worker():
     regs = get_regs(LIMIT)
+    if not bool(regs):
+        print(regs.__len__(),"Found")
+        exit()
     datas = collect_regs_data(regs)
     datas = list(filter(lambda d:d['data'],datas))
     def map_def(d):
