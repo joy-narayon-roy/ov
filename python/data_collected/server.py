@@ -4,8 +4,18 @@ import json
 app = Flask(__name__)
 
 
-@app.route('/api/student/login', methods=['GET', 'POST'])
-def home():
+@app.route("/insertreg/<int:reg>")
+def insert_reg(reg):
+    conn = sqlite3.connect("./db/regs.db")
+    curs = conn.cursor()
+    curs.execute('INSERT OR IGNORE INTO Regs(reg,collected) VALUES (?,0)',(reg,))
+    conn.commit()
+    conn.close()
+    return str(reg), 200
+
+
+@app.route('/test/api/student/login', methods=['GET', 'POST'])
+def test_server():
     reg = int(request.form.get("username"))
     if not reg:
         return jsonify({"msg": "Provide valid username"}), 400
@@ -25,4 +35,4 @@ def home():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8080)
+    app.run(debug=True,host="0.0.0.0", port=8200)

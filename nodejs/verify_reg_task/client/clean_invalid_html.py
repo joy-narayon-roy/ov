@@ -28,6 +28,8 @@ def read_html(file_path):
         [col1, col2] = row.find_all('td')
         data_obj[col1.text] = col2.text
 
+    data_obj["img"] = f"{html_file.find('img').attrs.get('src')}"
+
     save_as_json(file_name, data_obj)
     print("\t", file_name, "Saved")
     return 1

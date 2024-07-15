@@ -9,13 +9,6 @@ const { Op } = require("sequelize");
 
 const app = express();
 
-app.use([
-  morgan("tiny"),
-  express.json({ limit: "100mb" }),
-  express.urlencoded({ extended: true }),
-  router,
-]);
-
 const PORT = process.env.PORT || 1000;
 
 async function main() {
@@ -41,6 +34,14 @@ async function main() {
     console.log(e);
   }
 }
+
+app.use([
+  morgan("tiny"),
+  express.json(),
+  express.urlencoded({ extended: true }),
+]);
+
+app.use(router);
 
 db.sync()
   .then(async () => {

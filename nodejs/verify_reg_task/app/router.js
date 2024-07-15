@@ -19,6 +19,36 @@ router.get("/v/t/next", async (req, res) => {
   }
 });
 
+router.post("/v/reload", async (req, res) => {
+  try {
+    const regs = req.body;
+    const reloaded_reg = [];
+    for (const reg of regs) {
+      const reg_info = await Regs.findByPk(reg);
+
+      if (!reg_info) {
+        await Regs.create({
+          reg: reg,
+          checked: false,
+          valid: false,
+        });
+        reloaded_reg.push(reg);
+      } else {
+        if (reg_info.checked) {
+          reg_info.set("checked", false);
+          await reg_info.save();
+        }
+        reloaded_reg.push(reg);
+      }
+    }
+
+    return res.status(200).json(reloaded_reg);
+  } catch (e) {
+    console.log(e);
+    res.status(500).send("Error");
+  }
+});
+
 router.get("/v/t/all", async (req, res) => {
   try {
     const next_task = task.get_all_tasked().map((data) => data.toJSON());
@@ -51,6 +81,44 @@ router.get("/v/:reg", async (req, res) => {
   }
 });
 
+router.post("/v/:reg", async (req, res) => {
+  try {
+    const { reg } = req.params;
+    const data = req.body;
+    if (!data) {
+      return res.status(400).send("Provide raw data.");
+    }
+    // return res.status(200).send()
+    const reg_data = await Regs.findByPk(reg);
+    if (!reg_data) {
+      await Regs.create({
+        reg,
+        checked: true,
+        valid: true,
+        rawdata: data ? JSON.stringify(data) : null,
+      });
+      return res.status(200).send("OK");
+    }
+    reg_data.set({
+      valid: true,
+      rawdata: data ? JSON.stringify(data) : null,
+    });
+    reg_data
+      .save()
+      .then((d) => {
+        console.log(reg, "Data stored");
+      })
+      .catch((e) => {
+        console.log(e);
+        console.log(reg, "Error");
+      });
+    res.status(200).send(reg_data);
+  } catch (e) {
+    console.log(e);
+    res.status(500).send("Err");
+  }
+});
+
 router.get("/v/reload/:reg", async (req, res) => {
   try {
     const { reg } = req.params;
@@ -72,6 +140,7 @@ router.get("/v/reload/:reg", async (req, res) => {
     console.log(err);
   }
 });
+
 // router.get("/", async () => {});
 
 module.exports = router;
