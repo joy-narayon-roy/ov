@@ -7,7 +7,7 @@ MASTER_PORT = 8100
 
 
 def get_store_db():
-    conn = sqlite3.connect("../db/test_store.db")
+    conn = sqlite3.connect("../db/store.db")
     curs = conn.cursor()
     curs.execute('''
     CREATE TABLE IF NOT EXISTS "html" (
