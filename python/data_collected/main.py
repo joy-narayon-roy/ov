@@ -5,9 +5,10 @@ import json
 import sqlite3
 import traceback
 
-DB_PATH = "./db/test.db"
-# SERVER_ADDRESS = "http://103.113.200.45:8006/api/student/login"
-SERVER_ADDRESS = "http://127.0.0.1:8080/api/student/login"
+# DB_PATH = "./db/test.db"
+# SERVER_ADDRESS = "http://127.0.0.1:8080/api/student/login"
+DB_PATH = "./db/regs.db"
+SERVER_ADDRESS = "http://103.113.200.45:8006/api/student/login"
 LIMIT = 20
 
 def save_res(name=None, txt="", save_path="./res"):
