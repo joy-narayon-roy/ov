@@ -18,7 +18,7 @@ const Regs = sequelize.define(
       defaultValue: false,
     },
     rawdata: {
-      type: DataTypes.JSON,
+      type: DataTypes.TEXT,
       defaultValue: null,
     },
   },
