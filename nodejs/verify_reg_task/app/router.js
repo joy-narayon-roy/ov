@@ -144,8 +144,12 @@ router.get("/v/reload/:reg", async (req, res) => {
 
 router.get("/api/all/valid", async (req, res) => {
   try {
-    const { limit = 10, page = 0 } = req.query;
+    const { limit = 10, page = 0, reg = null } = req.query;
     const offset = page * limit;
+    if (reg) {
+      const d = await Regs.findByPk(Number(reg));
+      return res.status(200).json(d);
+    }
     const data = await Regs.findAll({
       where: {
         rawdata: {
