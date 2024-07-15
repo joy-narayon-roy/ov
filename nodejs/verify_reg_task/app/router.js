@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const task = require("./task");
 const Regs = require("./models");
+const { Op } = require("sequelize");
 
 router.get("/v/t/next", async (req, res) => {
   try {
@@ -138,6 +139,31 @@ router.get("/v/reload/:reg", async (req, res) => {
   } catch (err) {
     res.status(500).send("Error");
     console.log(err);
+  }
+});
+
+router.get("/api/all/valid", async (req, res) => {
+  try {
+    const { limit = 10, page = 0 } = req.query;
+    const offset = page * limit;
+    const data = await Regs.findAll({
+      where: {
+        rawdata: {
+          [Op.not]: null,
+        },
+      },
+      limit,
+      offset,
+    });
+    return res.status(200).json(
+      data.map((d) => {
+        d.rawdata = JSON.parse(d.rawdata);
+        return d;
+      })
+    );
+  } catch (e) {
+    console.log(e);
+    return res.status(500).send("Server Error.");
   }
 });
 
