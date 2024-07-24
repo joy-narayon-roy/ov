@@ -20,17 +20,8 @@ def save_res(name=None, txt="", save_path="./res"):
         file.close()
 
 
-def logger_z(name=None, txt="", save_path="./log"):
-    if not name:
-        name = f'{int(time.time())}'
-    log_path = f'{save_path}/{name}.log'
-    with open(log_path, "w") as file:
-        file.write(str(txt))
-        file.close()
-
-
 def get_regs(limit=10):
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(DB_PATH,60)
     cursor = conn.cursor()
     data = cursor.execute(
         f"SELECT reg FROM Regs WHERE data IS NULL LIMIT {limit}").fetchall()
@@ -78,7 +69,7 @@ def collect_data(reg):
 
 def collect_regs_data(reg_list):
     try:
-        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=LIMIT) as executor:
             while True:
                 results = list(executor.map(collect_data, reg_list))
                 return results

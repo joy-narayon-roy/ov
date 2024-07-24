@@ -57,10 +57,10 @@ def read_html(reg, html_res):
     table = html_file.find('table')
     if not table:
         return None
-    for row in table.find_all('tr'):
+    for row in table.find_all('tr'): # type: ignore
         [col1, col2] = row.find_all('td')
         data_obj[col1.text] = col2.text
-    data_obj["img"] = f"{html_file.find('img').attrs.get('src')}"
+    data_obj["img"] = f"{html_file.find('img').attrs.get('src')}" # type: ignore
 
     save_as_json(reg, data_obj)
     return data_obj
