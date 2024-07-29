@@ -2,7 +2,7 @@ import sqlite3 as sql
 import json
 
 def db_conn():
-    conn = sql.connect("./db/test.db")
+    conn = sql.connect("./db/regs.db")
     curs = conn.cursor()
     curs.execute('''CREATE TABLE IF NOT EXISTS Valid_students ("reg"	INT NOT NULL,
 	"name"	TEXT DEFAULT NULL,
