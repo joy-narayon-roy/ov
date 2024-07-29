@@ -3,8 +3,9 @@ import sqlite3
 import json
 app = Flask(__name__)
 
-db_conn = sqlite3.connect("./db/regs.db",60,check_same_thread=False)
-db_cursor = db_conn.cursor() 
+db_conn = sqlite3.connect("./db/regs.db", 60, check_same_thread=False)
+db_cursor = db_conn.cursor()
+
 
 @app.route("/insertreg/<int:reg>")
 def insert_reg(reg):
@@ -22,12 +23,13 @@ def get_all_data():
     limit = request.args.get('limit', default=10, type=int) or 10
     page = request.args.get('page', default=0, type=int) or 0
     offset = page * limit
-    
+
     data = db_cursor.execute(
         f"SELECT * FROM Regs WHERE data NOT NULL ORDER BY reg ASC LIMIT {limit} OFFSET {offset}").fetchall()
-    data = list(map(lambda d:(d[0],json.loads(d[1])),data))
-    
+    data = list(map(lambda d: (d[0], json.loads(d[1])), data))
+
     return jsonify(data)
+
 
 @app.route("/api/valid/student")
 def get_valid_student():
@@ -35,12 +37,13 @@ def get_valid_student():
     page = request.args.get('page', default=0, type=int) or 0
     subject = request.args.get('subject', default=None, type=str)
     college = request.args.get('college', default=None, type=str)
-    
-    
-    
+
+    query = ""
+
     offset = page * limit
     print(query)
-    datas = db_cursor.execute(f"SELECT * FROM Valid_students {query} LIMIT {limit} OFFSET {offset}").fetchall()
+    datas = db_cursor.execute(
+        f"SELECT * FROM Valid_students {query} LIMIT {limit} OFFSET {offset}").fetchall()
     return jsonify(datas)
 
 
