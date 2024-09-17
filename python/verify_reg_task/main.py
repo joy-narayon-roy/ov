@@ -1,18 +1,11 @@
 import requests as req
-import sys
 import sqlite3
 import db.verify_db as verify_db
 import json
 import os
 from bs4 import BeautifulSoup
 
-MASTER_PORT = 8100
-
-
-def printf(stri):
-    sys.stdout.write(f"{stri}")
-    sys.stdout.flush()
-
+COUNT_ID = 1
 
 def logger(reg, data=""):
     if not os.path.exists("./log"):
@@ -30,22 +23,12 @@ def save_as_json(name, data):
     file.close()
 
 
-def old_get_reg():
-    try:
-        res = req.get(f'http://localhost:{MASTER_PORT}/v/t/next')
-        res.raise_for_status()
-        return res.json()['reg']
-    except Exception as err:
-        print(err)
-        exit()
-
-
 def get_reg(conn: sqlite3.Connection) -> int | None:
     try:
         # Start an immediate transaction to lock the table
         conn.execute("BEGIN IMMEDIATE;")
         cursor = conn.execute(
-            "SELECT curr FROM Count WHERE id = 1 LIMIT 1;")
+            "SELECT curr FROM Count WHERE id = ? LIMIT 1;",(COUNT_ID,))
         curr = cursor.fetchone()
 
         if curr:
@@ -101,13 +84,6 @@ def read_html(reg, html_res):
     return data_obj
 
 
-def old_this_is_valid(reg, data={}):
-    res = req.post(f'http://localhost:{MASTER_PORT}/v/{reg}', json=data)
-    res.raise_for_status()
-
-# TODO: Complete this funtion
-
-
 def this_is_valid(conn: sqlite3.Connection, reg: int, data: dict):
     reg = int(reg)
     conn.execute(f'INSERT OR IGNORE INTO Valid(reg,raw_data) VALUES (?,?)',
@@ -126,7 +102,6 @@ def worker(worker_id=1):
             if not reg:
                 print("No reg found")
                 exit()
-            # printf(f"{worker_id}. {reg}")
 
             (exist, html_res) = verify(reg)
             if exist:
