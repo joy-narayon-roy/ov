@@ -87,5 +87,5 @@ def processes_successs(conn: sqlite3.Connection, reg, *, commit=True):
     if commit:
         conn.commit()
 
-if __name__ =="__mai__":
+if __name__ =="__main__":
     use_db("./db/verify_task.db")
