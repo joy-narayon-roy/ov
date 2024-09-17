@@ -1,11 +1,12 @@
 import requests as req
 import sqlite3
-import db.verify_db as verify_db
+import db_helper as db_helper
 import json
 import os
 from bs4 import BeautifulSoup
 
 COUNT_ID = 1
+
 
 def logger(reg, data=""):
     if not os.path.exists("./log"):
@@ -24,29 +25,7 @@ def save_as_json(name, data):
 
 
 def get_reg(conn: sqlite3.Connection) -> int | None:
-    try:
-        # Start an immediate transaction to lock the table
-        conn.execute("BEGIN IMMEDIATE;")
-        cursor = conn.execute(
-            "SELECT curr FROM Count WHERE id = ? LIMIT 1;",(COUNT_ID,))
-        curr = cursor.fetchone()
-
-        if curr:
-            curr = curr[0]
-            curr += 1
-            conn.execute(
-                "UPDATE Count SET curr = ? WHERE id = ?;", (curr, 1))
-            conn.commit()
-            return curr
-        else:
-            conn.rollback()  # Rollback if no URL was found
-            return None
-    except sqlite3.Error as e:
-        print('-'*20, "DB Error", '-'*20)
-        print(e)
-        print('-'*20, "--------", '-'*20)
-        conn.rollback()
-        return None
+    return db_helper.get_counter_current(conn)
 
 
 def verify(reg):
@@ -93,7 +72,7 @@ def this_is_valid(conn: sqlite3.Connection, reg: int, data: dict):
 
 
 def worker(worker_id=1):
-    db_conn = verify_db.use_db("./db/verify_task.db")
+    db_conn = db_helper.use_db("./db/verify_task.db")
     while True:
         try:
             # TODO:
@@ -107,21 +86,27 @@ def worker(worker_id=1):
             if exist:
                 raw_data = read_html(reg, html_res)
                 this_is_valid(db_conn, reg, raw_data)
-                print(f"{worker_id}. {reg} Exist\n")
+                print(f"{worker_id}. {reg} Exist")
             else:
-                print(f"{worker_id}. {reg} Not Exist\n")
-
+                print(f"{worker_id}. {reg} Not Exist")
+            db_helper.processes_successs(db_conn, reg)
         except KeyboardInterrupt:
             logger(reg, f"{reg} : Exit")
-            print(f"\n{worker_id}.", reg, "Exit")
+            db_conn.commit()
+            print(f"{worker_id}.", reg, "Exit")
             exit()
         except Exception as err:
             logger(reg, str(err))
+            db_conn.commit()
             print(err, "\n", f"{worker_id}.", reg)
             exit()
-        break
+        # break
 
 
 if __name__ == "__main__":
     worker()
+    # conn = db_helper.use_db("./test.db")
+    # curr = 22221000004 or db_helper.get_counter_current(conn)
+    # db_helper.processes_successs(conn, curr)
+    # print(curr)
     # test()
