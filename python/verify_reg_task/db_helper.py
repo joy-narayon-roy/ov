@@ -1,4 +1,5 @@
 import sqlite3
+import traceback
 
 COUNT_TABLE = '''
 CREATE TABLE IF NOT EXISTS "Count" (
@@ -115,6 +116,7 @@ def get_counter_current(conn: sqlite3.Connection, *, counter_id=1) -> int | None
     except sqlite3.Error as e:
         print('-'*20, "DB Error", '-'*20)
         print(e)
+        traceback.print_exc()
         print('-'*20, "--------", '-'*20)
         conn.rollback()
         return None
@@ -157,6 +159,7 @@ def get_failed_reg(conn: sqlite3.Connection):
     except sqlite3.Error as e:
         print('-'*20, "DB Error", '-'*20)
         print(e)
+        traceback.print_exc()
         print('-'*20, "--------", '-'*20)
         conn.rollback()
         return None
