@@ -41,6 +41,43 @@ INSERT OR IGNORE INTO Count(id,curr) VALUES (1,22221000000)
 '''
 
 
+def remove_valid_from_failed(conn: sqlite3.Connection):
+    try:
+        # Corrected SQL query with parentheses around the subquery
+        conn.execute("""
+            DELETE FROM Failed
+            WHERE reg IN (SELECT reg FROM Valid);
+        """)
+        # Commit the changes to the database
+        conn.commit()
+
+    except sqlite3.Error as e:
+        # Roll back any changes if there is an error
+        conn.rollback()
+        print(f"An error occurred: {e}")
+
+
+def move_data_from_selected_to_failed(conn: sqlite3.Connection):
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("""
+            INSERT OR IGNORE INTO Failed (reg, checked)
+            SELECT reg, checked FROM Selected;
+        """)
+
+        cursor.execute("DELETE FROM Selected;")
+        conn.commit()
+        remove_valid_from_failed(conn)
+
+    except sqlite3.Error as e:
+        conn.rollback()
+        print(f"An error occurred: {e}")
+
+    finally:
+        conn.close()
+
+
 def use_db(pth: str) -> sqlite3.Connection:
     conn = sqlite3.connect(pth, 60, check_same_thread=False)
     conn.execute(COUNT_TABLE)
@@ -49,6 +86,7 @@ def use_db(pth: str) -> sqlite3.Connection:
     conn.execute(FAILD_COUNT_TABLE)
     conn.execute(DEFAULT_COUNT)
     conn.commit()
+    move_data_from_selected_to_failed(conn)
     return conn
 
 
@@ -87,5 +125,42 @@ def processes_successs(conn: sqlite3.Connection, reg, *, commit=True):
     if commit:
         conn.commit()
 
-if __name__ =="__main__":
+
+def get_valid_regs(conn: sqlite3.Connection):
+    curs = conn.execute("SELECT reg FROM Valid;")
+    results = curs.fetchall()
+    results = list(map(lambda x: x[0], results))
+    return results
+
+
+def get_failed_reg(conn: sqlite3.Connection):
+    try:
+        # Start an immediate transaction to lock the table
+        conn.execute("BEGIN IMMEDIATE;")
+        cursor = conn.execute(
+            "SELECT reg FROM Failed LIMIT 1;")
+        failed_reg = cursor.fetchone()
+
+        if not failed_reg:
+            return None
+
+        if failed_reg:
+            conn.execute(
+                "DELETE FROM Failed WHERE reg = ?;", (failed_reg,))
+            conn.execute(
+                "INSERT OR IGNORE INTO Selected(reg) VALUES (?);", (failed_reg,))
+            conn.commit()
+            return failed_reg
+        else:
+            conn.rollback()  # Rollback if no URL was found
+            return None
+    except sqlite3.Error as e:
+        print('-'*20, "DB Error", '-'*20)
+        print(e)
+        print('-'*20, "--------", '-'*20)
+        conn.rollback()
+        return None
+
+
+if __name__ == "__main__":
     use_db("./db/verify_task.db")

@@ -22,6 +22,13 @@ def save_as_json(name, data):
     file = open(f"./data/{name}.json", "w")
     file.write(json.dumps(data, indent=4))
     file.close()
+    return
+
+
+def delete_file(pth):
+    if os.path.exists(pth):
+        os.remove(pth)
+    return
 
 
 def get_reg(conn: sqlite3.Connection) -> int | None:
@@ -89,7 +96,11 @@ def worker(worker_id=1):
                 print(f"{worker_id}. {reg} Exist")
             else:
                 print(f"{worker_id}. {reg} Not Exist")
+
             db_helper.processes_successs(db_conn, reg)
+            delete_file(f'./html/{reg}.html')
+            delete_file(f'./log/{reg}.log')
+            delete_file(f'./data/{reg}.json')
         except KeyboardInterrupt:
             logger(reg, f"{reg} : Exit")
             db_conn.commit()
@@ -103,7 +114,39 @@ def worker(worker_id=1):
         # break
 
 
+def failed_worker():
+    conn = db_helper.use_db("./db/verify_task.db")
+    stop = False
+    while not stop:
+        try:
+            reg = db_helper.get_failed_reg(conn)
+            if not reg:
+                stop = True
+                break
+
+            (exist, html_res) = verify(reg)
+            if exist:
+                raw_data = read_html(reg, html_res)
+                this_is_valid(conn, reg, raw_data)
+                print(f"{0}. {reg} Exist")
+            else:
+                print(f"{0}. {reg} Not Exist")
+
+            db_helper.processes_successs(conn, reg)
+            delete_file(f'./html/{reg}.html')
+            delete_file(f'./log/{reg}.log')
+            delete_file(f'./data/{reg}.json')
+
+        except Exception as err:
+            logger(reg, str(err))
+            conn.commit()
+            print(err, '\n', reg)
+            exit()
+            return 0
+
+
 if __name__ == "__main__":
+    failed_worker()
     worker()
     # conn = db_helper.use_db("./test.db")
     # curr = 22221000004 or db_helper.get_counter_current(conn)
