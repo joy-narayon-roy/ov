@@ -80,7 +80,7 @@ def move_data_from_selected_to_failed(conn: sqlite3.Connection):
 
 
 def use_db(pth: str) -> sqlite3.Connection:
-    conn = sqlite3.connect(pth, 60, check_same_thread=False)
+    conn = sqlite3.connect(pth, 300, check_same_thread=False)
     conn.execute(COUNT_TABLE)
     conn.execute(SELECTED_TABLE)
     conn.execute(VALID_TABLE)
