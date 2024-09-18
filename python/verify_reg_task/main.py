@@ -79,11 +79,10 @@ def this_is_valid(conn: sqlite3.Connection, reg: int, data: dict):
 
 
 def worker(worker_id=1):
-    print("Worker ", worker_id)
     db_conn = db_helper.use_db("./db/verify_task.db")
-    print("Worker ", worker_id)
+
     while True:
-        print("Worker ", worker_id)
+
         try:
             # TODO:
             # reg = "22225266100" or get_reg()  # Test
@@ -91,8 +90,6 @@ def worker(worker_id=1):
             if not reg:
                 print("No reg found")
                 exit()
-
-            print(reg)
 
             (exist, html_res) = verify(reg)
             if exist:

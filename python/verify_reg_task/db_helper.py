@@ -44,8 +44,6 @@ INSERT OR IGNORE INTO Count(id,curr) VALUES (1,22221000000)
 
 def remove_valid_from_failed(conn: sqlite3.Connection):
     try:
-        print("\t\tWTF remove_valid_from_failed")
-
         # Corrected SQL query with parentheses around the subquery
         conn.execute("""
             DELETE FROM Failed
@@ -53,7 +51,6 @@ def remove_valid_from_failed(conn: sqlite3.Connection):
         """)
         # Commit the changes to the database
         conn.commit()
-        print("\t\tWTF backing remove_valid_from_failed")
 
     except sqlite3.Error as e:
         # Roll back any changes if there is an error
@@ -65,7 +62,6 @@ def move_data_from_selected_to_failed(conn: sqlite3.Connection):
     cursor = conn.cursor()
 
     try:
-        print("\tWTF move_data_from_selected_to_failed")
 
         cursor.execute("""
             INSERT OR IGNORE INTO Failed (reg, checked)
@@ -75,7 +71,6 @@ def move_data_from_selected_to_failed(conn: sqlite3.Connection):
         cursor.execute("DELETE FROM Selected;")
         conn.commit()
         remove_valid_from_failed(conn)
-        print("\tWTF Back move_data_from_selected_to_failed")
 
     except sqlite3.Error as e:
         conn.rollback()
@@ -93,9 +88,9 @@ def use_db(pth: str) -> sqlite3.Connection:
     conn.execute(FAILD_COUNT_TABLE)
     conn.execute(DEFAULT_COUNT)
     conn.commit()
-    print("WTF use_db")
+
     move_data_from_selected_to_failed(conn)
-    print("WTF Back use_db")
+
     return conn
 
 
