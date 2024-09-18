@@ -150,7 +150,7 @@ def failed_worker():
 
 
 if __name__ == "__main__":
-    failed_worker()
+    # failed_worker()
     print("Start Main Work")
     worker()
     # conn = db_helper.use_db("./test.db")
