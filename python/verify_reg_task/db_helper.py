@@ -53,6 +53,7 @@ def remove_valid_from_failed(conn: sqlite3.Connection):
         """)
         # Commit the changes to the database
         conn.commit()
+        print("\t\tWTF backing use_db")
 
     except sqlite3.Error as e:
         # Roll back any changes if there is an error
@@ -74,6 +75,7 @@ def move_data_from_selected_to_failed(conn: sqlite3.Connection):
         cursor.execute("DELETE FROM Selected;")
         conn.commit()
         remove_valid_from_failed(conn)
+        print("\tWTF Back use_db")
 
     except sqlite3.Error as e:
         conn.rollback()

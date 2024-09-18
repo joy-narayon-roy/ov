@@ -89,6 +89,8 @@ def worker(worker_id=1):
                 print("No reg found")
                 exit()
 
+            print(reg)
+
             (exist, html_res) = verify(reg)
             if exist:
                 raw_data = read_html(reg, html_res)
