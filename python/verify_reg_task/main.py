@@ -148,8 +148,8 @@ def failed_worker():
             print(err, '\n', reg)
             exit()
             return 0
-        conn.commit()
-        conn.close()
+    conn.commit()
+    conn.close()
 
 
 if __name__ == "__main__":
