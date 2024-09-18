@@ -141,8 +141,7 @@ def get_failed_reg(conn: sqlite3.Connection):
         conn.execute("BEGIN IMMEDIATE;")
         cursor = conn.execute(
             "SELECT reg FROM Failed LIMIT 1;")
-        failed_reg = cursor.fetchone()
-        print(failed_reg)
+        (failed_reg) = cursor.fetchone()
 
         if not failed_reg:
             return None
