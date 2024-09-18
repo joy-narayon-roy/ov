@@ -74,8 +74,8 @@ def move_data_from_selected_to_failed(conn: sqlite3.Connection):
         conn.rollback()
         print(f"An error occurred: {e}")
 
-    finally:
-        conn.close()
+    # finally:
+    #     conn.close()
 
 
 def use_db(pth: str) -> sqlite3.Connection:
